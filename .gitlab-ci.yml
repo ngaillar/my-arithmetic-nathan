@@ -1,7 +1,11 @@
 image: python:3.10
 
+variables:            # NOUVEAU : tout l'historique git, pour que hatch-vcs voie les tags
+  GIT_DEPTH: 0
+
 stages:
   - test
+  - deploy            # NOUVEAU : 2e étape
 
 before_script:
   - python --version
@@ -14,3 +18,21 @@ tests:
     - pip install coverage
     - coverage xml
   coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+
+deploy-stable:        # NOUVEAU : seulement quand on pousse un tag
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - hatch build -t wheel
+    - echo "my-arithmetic-nathan deployment on stable servers"
+    - ls dist/
+
+deploy-develop:       # NOUVEAU : seulement sur la branche develop
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+  script:
+    - hatch build -t wheel
+    - echo "my-arithmetic-nathan deployment on develop servers"
+    - ls dist/
