@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -32,7 +32,11 @@ Issues = "https://github.com/ngaillar/my-arithmetic-nathan/issues"
 Source = "https://github.com/ngaillar/my-arithmetic-nathan"
 
 [tool.hatch.version]
-path = "src/my_arithmetic_nathan/__about__.py"
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+version_scheme = "no-guess-dev"
+local_scheme = "no-local-version"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
